@@ -10,6 +10,7 @@ const About = () => {
     const [buttonadd,setbuttonadd]=useState(true)
     const [buttonokk,setbuttonokk]=useState(false)
     const [items,setitems]=useState([])
+    const [body,setbody]=useState(false)
     const inputref=useRef("")
     const handledate=async()=>{
     await axios.post("https://66613fd663e6a0189fe90160.mockapi.io/about",{date:date,about:about})
@@ -43,6 +44,7 @@ const About = () => {
           setabout(val.data.about)
           setids(id)
           inputref.current.focus()
+          setbody(!body)
      }
      const handleditt=async (e)=>{
         setbuttonokk(false)
@@ -56,6 +58,7 @@ const About = () => {
             return item;
         }));
         setabout("")
+        setbody(!body)
      }
   return (
     <>
@@ -64,12 +67,13 @@ const About = () => {
     <button style={{display:buttonadd?"block":"none"}} onClick={handledate}>ADD</button>   
     <button style={{display:buttonokk?"block":"none"}} value={ids} onClick={(e)=>handleditt(e)}>OKK</button>   
     </div>
+    
     <div className='container'>
         {items.map((item)=>(
        <div className='box' key={item.id}> <h3>Date: {item.date}</h3>
         <p><h2>Description:</h2> {item.about}</p>
-        <button onClick={()=>handledit(item.id)}>EDIT</button>
-        <button onClick={()=>handledelete(item.id)}>DELETE</button>
+        <button onClick={()=>handledit(item.id)} disabled={body} style={{backgroundColor:body?"gray":"#385170"}}>EDIT</button>
+        <button onClick={()=>handledelete(item.id)} disabled={body} style={{backgroundColor:body?"gray":"#385170"}}>DELETE</button>
         </div>
     ))}</div></>
   )
