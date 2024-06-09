@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, {  useEffect, useState } from 'react'
+import React, {  useEffect, useRef, useState } from 'react'
 
 
 const About = () => {
@@ -10,6 +10,7 @@ const About = () => {
     const [buttonadd,setbuttonadd]=useState(true)
     const [buttonokk,setbuttonokk]=useState(false)
     const [items,setitems]=useState([])
+    const inputref=useRef("")
     const handledate=async()=>{
     await axios.post("https://66613fd663e6a0189fe90160.mockapi.io/about",{date:date,about:about})
     const newItemResponse = await axios.get("https://66613fd663e6a0189fe90160.mockapi.io/about");
@@ -41,6 +42,7 @@ const About = () => {
       const val=await axios.get(`https://66613fd663e6a0189fe90160.mockapi.io/about/${id}`)
           setabout(val.data.about)
           setids(id)
+          inputref.current.focus()
      }
      const handleditt=async (e)=>{
         setbuttonokk(false)
@@ -53,11 +55,12 @@ const About = () => {
             }
             return item;
         }));
+        setabout("")
      }
   return (
     <>
   <div className="input"><input required type="date" placeholder="Date" value={date} onChange={(e)=>setdate(e.target.value)}/>
-    <textarea required type="text" placeholder="Write About your Day..." value={about} onChange={(e)=>setabout(e.target.value)}/>
+    <textarea required type="text" ref={inputref} placeholder="Write About your Day..." value={about} onChange={(e)=>setabout(e.target.value)}/>
     <button style={{display:buttonadd?"block":"none"}} onClick={handledate}>ADD</button>   
     <button style={{display:buttonokk?"block":"none"}} value={ids} onClick={(e)=>handleditt(e)}>OKK</button>   
     </div>
